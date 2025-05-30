@@ -154,19 +154,69 @@
             cursor: pointer;
         }
 
-        /* Hero Section */
+        /* Hero Section with Video Background */
         .hero {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)), 
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23334155" width="1200" height="600"/><rect fill="%23475569" x="0" y="0" width="400" height="600"/><rect fill="%2364748b" x="800" y="0" width="400" height="600"/></svg>');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             align-items: center;
             color: white;
             position: relative;
             overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .hero-video.loading {
+            opacity: 0;
+        }
+
+        .video-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            z-index: -2;
+            font-size: 1.2rem;
+        }
+
+        .hero-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg, 
+                rgba(15, 23, 42, 0.85) 0%, 
+                rgba(30, 41, 59, 0.75) 50%, 
+                rgba(15, 23, 42, 0.85) 100%
+            );
+            z-index: -2;
+        }
+
+        .hero-video-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23334155" width="1200" height="600"/><rect fill="%23475569" x="0" y="0" width="400" height="600"/><rect fill="%2364748b" x="800" y="0" width="400" height="600"/></svg>');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: -3;
         }
 
         .hero::before {
@@ -178,6 +228,7 @@
             bottom: 0;
             background: linear-gradient(45deg, transparent 0%, rgba(220, 38, 38, 0.1) 50%, transparent 100%);
             animation: shimmer 8s ease-in-out infinite;
+            z-index: -1;
         }
 
         .hero-container {
@@ -203,6 +254,7 @@
             font-weight: 700;
             line-height: 1.1;
             margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .hero-content .highlight {
@@ -212,10 +264,11 @@
 
         .hero-subtitle {
             font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             margin-bottom: 2rem;
             max-width: 500px;
             line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .hero-features {
@@ -232,6 +285,7 @@
             opacity: 0;
             transform: translateX(-30px);
             animation: slideInLeft 0.6s ease forwards;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .hero-features li:nth-child(1) { animation-delay: 1s; }
@@ -275,7 +329,7 @@
         }
 
         .btn-secondary {
-            background: transparent;
+            background: rgba(255, 255, 255, 0.15);
             color: white;
             padding: 1.2rem 2.5rem;
             text-decoration: none;
@@ -286,16 +340,17 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            backdrop-filter: blur(10px);
         }
 
         .btn-secondary:hover {
             border-color: white;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
 
         .hero-info {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             padding: 2.5rem;
             border-radius: 12px;
             backdrop-filter: blur(15px);
@@ -303,6 +358,7 @@
             opacity: 0;
             transform: translateY(50px);
             animation: fadeInUp 1s ease 1s forwards;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .hero-info h3 {
@@ -326,13 +382,35 @@
         }
 
         .info-label {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 0.95rem;
         }
 
         .info-value {
             font-weight: 600;
             color: white;
+        }
+
+        /* Video Control Button */
+        .video-control {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .video-control:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
         }
 
         /* Stats Section */
@@ -935,6 +1013,12 @@
                 grid-template-columns: 1fr;
                 gap: 3rem;
             }
+
+            .video-control {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.6rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -970,6 +1054,10 @@
             .why-choose-visual {
                 grid-template-columns: 1fr;
             }
+
+            .hero-video {
+                object-position: center;
+            }
         }
 
         @media (max-width: 480px) {
@@ -990,6 +1078,17 @@
             
             .hero-content h1 {
                 font-size: 2.2rem;
+            }
+
+            .hero-info {
+                padding: 2rem;
+            }
+
+            .video-control {
+                bottom: 0.5rem;
+                right: 0.5rem;
+                padding: 0.5rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -1017,6 +1116,28 @@
     </header>
 
     <section id="home" class="hero">
+        <!-- Background Video -->
+        <video class="hero-video loading" autoplay muted loop playsinline id="heroVideo" preload="auto">
+            <source src="https://video.wixstatic.com/video/11062b_68920fa1e1f548ed92db3a11f901db6f/1080p/mp4/file.mp4" type="video/mp4">
+            <!-- Fallback for browsers that don't support video -->
+        </video>
+        
+        <!-- Video Loading Indicator -->
+        <div class="video-loading" id="videoLoading">
+            <i class="fas fa-spinner fa-spin"></i> Načítání videa...
+        </div>
+        
+        <!-- Video Overlay -->
+         
+        
+        <!-- Fallback Background -->
+        
+        
+        <!-- Video Control Button -->
+        <button class="video-control" id="videoControl" title="Přehrát/Pozastavit video">
+            <i class="fas fa-pause" id="videoIcon"></i>
+        </button>
+
         <div class="hero-container">
             <div class="hero-content">
                 <h1>Profesionální <span class="highlight">Autoservis</span> v Brně</h1>
@@ -1356,6 +1477,94 @@
     </footer>
 
     <script>
+        // Video control functionality
+        function initVideoControls() {
+            const video = document.getElementById('heroVideo');
+            const videoControl = document.getElementById('videoControl');
+            const videoIcon = document.getElementById('videoIcon');
+            const videoLoading = document.getElementById('videoLoading');
+
+            if (video && videoControl) {
+                console.log('Initializing video controls...');
+                
+                // Show loading indicator initially
+                if (videoLoading) {
+                    videoLoading.style.display = 'block';
+                }
+
+                // Video loading events
+                video.addEventListener('loadstart', function() {
+                    console.log('Video loading started');
+                    video.classList.add('loading');
+                });
+
+                video.addEventListener('canplay', function() {
+                    console.log('Video can start playing');
+                    video.classList.remove('loading');
+                    if (videoLoading) {
+                        videoLoading.style.display = 'none';
+                    }
+                });
+
+                video.addEventListener('loadeddata', function() {
+                    console.log('Video data loaded');
+                    video.classList.remove('loading');
+                    if (videoLoading) {
+                        videoLoading.style.display = 'none';
+                    }
+                    
+                    // Try to play the video
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            console.log('Video started playing successfully');
+                            videoIcon.className = 'fas fa-pause';
+                            videoControl.title = 'Pozastavit video';
+                        }).catch(error => {
+                            console.log('Autoplay was prevented:', error);
+                            videoIcon.className = 'fas fa-play';
+                            videoControl.title = 'Přehrát video';
+                        });
+                    }
+                });
+
+                // Handle video errors
+                video.addEventListener('error', function(e) {
+                    console.error('Video error:', e);
+                    console.error('Video error details:', video.error);
+                    video.style.display = 'none';
+                    if (videoLoading) {
+                        videoLoading.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Video se nepodařilo načíst';
+                        setTimeout(() => {
+                            videoLoading.style.display = 'none';
+                        }, 3000);
+                    }
+                });
+
+                // Manual play/pause control
+                videoControl.addEventListener('click', function() {
+                    if (video.paused) {
+                        const playPromise = video.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                videoIcon.className = 'fas fa-pause';
+                                videoControl.title = 'Pozastavit video';
+                            }).catch(error => {
+                                console.error('Play failed:', error);
+                            });
+                        }
+                    } else {
+                        video.pause();
+                        videoIcon.className = 'fas fa-play';
+                        videoControl.title = 'Přehrát video';
+                    }
+                });
+
+                // Try to load the video
+                video.load();
+            }
+        }
+
         // Scroll progress bar
         function updateScrollProgress() {
             const scrollTop = document.documentElement.scrollTop;
@@ -1475,6 +1684,7 @@
 
         // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
+            initVideoControls();
             createObserver();
             initSmoothScrolling();
             initFormSubmission();
